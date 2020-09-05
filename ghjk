@@ -1,31 +1,28 @@
-import numpy as np
-from scipy import stats
-import matplotlib.pyplot as plt
-import sympy as sm
-import pandas as pd
-from mpl_toolkits.mplot3d import Axes3D
+from PIL import Image, ImageFont
+from handright import Template, handwrite
 
-g=pd.read_excel("C:/Users/dell/Desktop/lol.xlsx")
-ab=g['体重'].values
-cd=g['身高'].values
-ef=g['肺活量'].values
-l=len(ab)
-
-ab=ab.reshape((len(ab),1))
-cd=cd.reshape((len(cd),1))
-ef=ef.reshape((len(ef),1))
-m=np.hstack((ab**2,cd))
-ones=np.ones((l,1))
-m=np.hstack((ones,m))
-theta=np.dot(np.dot(np.linalg.inv(np.dot(m.T,m)),m.T),ef)
-
-fig=plt.figure()
-ax2 = Axes3D(fig)
-x0=ones.reshape(1,l)
-x1=ab.reshape(1,l)
-x4=x1**2+x0
-x2=cd.reshape(1,l)
-x1,x2=np.meshgrid(x1**2,x2**2)
-x3=x0*theta[0]+(x1**2)*theta[1]+x2*theta[2]
-ax2.plot_surface(x1,x2,x3,rstride=1,cstride=1)
-plt.show()
+text="通常采用消毒工艺降低污水厂出水病原微生物浓度，降低其卫生安全风险。常用消毒工艺包括氯消毒、臭氧消毒、紫外消毒和超滤法等。但在权衡技术、经济和消毒效果等方面的因素，目前氯作为消毒剂仍具有明显的优势。"
+template = Template(
+    background = Image.new(mode="1", size=(2600, 3300), color=1),
+    font_size=80,
+    font=ImageFont.truetype("C:/Users/dell/Desktop/手写体打包/HYPingAnXingCuJ.ttf"),#这个地址是你选择的手写体包的位置
+    line_spacing=110,
+    fill=0,  # 字体“颜色”
+    left_margin=10,
+    top_margin=10,
+    right_margin=10,
+    bottom_margin=10,
+    word_spacing=0,
+    line_spacing_sigma=3,  # 行间距随机扰动
+    font_size_sigma=3,  # 字体大小随机扰动
+    word_spacing_sigma=3,  # 字间距随机扰动
+    end_chars="，。",  # 防止特定字符因排版算法的自动换行而出现在行首
+    perturb_x_sigma=2,  # 笔画横向偏移随机扰动
+    perturb_y_sigma=2,  # 笔画纵向偏移随机扰动
+    perturb_theta_sigma=0.05,  # 笔画旋转偏移随机扰动
+)
+images = handwrite(text, template)
+for i, im in enumerate(images):
+    assert isinstance(im, Image.Image)
+    im.show()
+    im.save("C:/Users/dell/Desktop".format(i))#这个地址是手写体图片生成以后存储图片的路径
