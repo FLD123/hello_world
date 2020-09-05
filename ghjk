@@ -1,7 +1,7 @@
 from PIL import Image, ImageFont
 from handright import Template, handwrite
 
-text="通常采用消毒工艺降低污水厂出水病原微生物浓度，降低其卫生安全风险。常用消毒工艺包括氯消毒、臭氧消毒、紫外消毒和超滤法等。但在权衡技术、经济和消毒效果等方面的因素，目前氯作为消毒剂仍具有明显的优势。"
+text="双引号里复制粘贴你需要手写的文本"
 template = Template(
     background = Image.new(mode="1", size=(2600, 3300), color=1),
     font_size=80,
